@@ -1,0 +1,40 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      WEAVIATE_HOST: weaviate
+      HF_HOME: /home/app/.cache/huggingface
+    volumes:
+      - huggingface_cache:/home/app/.cache/huggingface
+      - raw_data:/app/data/raw
+    depends_on:
+      weaviate:
+        condition: service_healthy
+  weaviate:
+    image: semitechnologies/weaviate:1.27.10
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    environment:
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      DEFAULT_VECTORIZER_MODULE: none
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      CLUSTER_HOSTNAME: node1
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/v1/.well-known/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  huggingface_cache:
+  raw_data:
+  weaviate_data:
