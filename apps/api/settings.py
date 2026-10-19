@@ -8,8 +8,11 @@ class Settings(BaseSettings):
 
     anthropic_api_key: str | None = None
     anthropic_model: str = "claude-sonnet-4-5"
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.5-flash"
     openai_api_key: str | None = None
     llm_provider: str = "anthropic"
+    llm_fallback_providers: str = ""
     edgar_identity: str | None = None
     weaviate_host: str = "localhost"
     weaviate_port: int = 8080

@@ -9,6 +9,10 @@ services:
     environment:
       WEAVIATE_HOST: weaviate
       HF_HOME: /home/app/.cache/huggingface
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      LLM_FALLBACK_PROVIDERS: ${LLM_FALLBACK_PROVIDERS:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
     volumes:
       - huggingface_cache:/home/app/.cache/huggingface
       - raw_data:/app/data/raw
